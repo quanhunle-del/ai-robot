@@ -1,0 +1,6 @@
+PASS short Chinese text centered and stationary
+PASS long Chinese text scrolls horizontally in both directions
+PASS multiline input remains a centered single line after long text
+PASS null/empty message clears and hides subtitle
+PASS idle hides both top layers despite clock/notification updates
+PASS leaving idle restores status bar and re-entering idle hides it

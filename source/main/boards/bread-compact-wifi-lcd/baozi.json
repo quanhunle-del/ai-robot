@@ -1,0 +1,22 @@
+{
+  "type": "bread-compact-wifi-lcd",
+  "target": "esp32s3",
+  "builds": [
+    {
+      "name": "bread-compact-wifi-lcd-baozi",
+      "sdkconfig_append": [
+        "CONFIG_LCD_ST7789_240X240=y",
+        "CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y",
+        "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/baozi-16m.csv\"",
+        "CONFIG_USE_DEFAULT_MESSAGE_STYLE=y",
+        "CONFIG_USE_MULTILINE_CHAT_MESSAGE=n",
+        "CONFIG_USE_CUSTOM_WAKE_WORD=y",
+        "CONFIG_CUSTOM_WAKE_WORD=\"ha lou bao zi\"",
+        "CONFIG_CUSTOM_WAKE_WORD_DISPLAY=\"哈喽包子\"",
+        "CONFIG_CUSTOM_WAKE_WORD_THRESHOLD=20",
+        "CONFIG_FLASH_CUSTOM_ASSETS=y",
+        "CONFIG_CUSTOM_ASSETS_FILE=\"../baozi-assets/assets.bin\""
+      ]
+    }
+  ]
+}

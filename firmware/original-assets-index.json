@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "srmodels": "srmodels.bin",
+  "text_font": "font_puhui_common_16_4.bin",
+  "emoji_collection": [
+    {
+      "name": "angry",
+      "file": "angry.gif"
+    },
+    {
+      "name": "confident",
+      "file": "confident.gif"
+    },
+    {
+      "name": "confused",
+      "file": "confused.gif"
+    },
+    {
+      "name": "cool",
+      "file": "cool.gif"
+    },
+    {
+      "name": "crying",
+      "file": "crying.gif"
+    },
+    {
+      "name": "delicious",
+      "file": "delicious.gif"
+    },
+    {
+      "name": "embarrassed",
+      "file": "embarrassed.gif"
+    },
+    {
+      "name": "funny",
+      "file": "funny.gif"
+    },
+    {
+      "name": "happy",
+      "file": "happy.gif"
+    },
+    {
+      "name": "kissy",
+      "file": "kissy.gif"
+    },
+    {
+      "name": "laughing",
+      "file": "laughing.gif"
+    },
+    {
+      "name": "loving",
+      "file": "loving.gif"
+    },
+    {
+      "name": "neutral",
+      "file": "neutral.gif"
+    },
+    {
+      "name": "relaxed",
+      "file": "relaxed.gif"
+    },
+    {
+      "name": "sad",
+      "file": "sad.gif"
+    },
+    {
+      "name": "shocked",
+      "file": "shocked.gif"
+    },
+    {
+      "name": "silly",
+      "file": "silly.gif"
+    },
+    {
+      "name": "sleepy",
+      "file": "sleepy.gif"
+    },
+    {
+      "name": "surprised",
+      "file": "surprised.gif"
+    },
+    {
+      "name": "thinking",
+      "file": "thinking.gif"
+    },
+    {
+      "name": "winking",
+      "file": "winking.gif"
+    },
+    {
+      "name": "microchip_ai",
+      "file": "neutral.gif"
+    }
+  ],
+  "skin": {
+    "light": {
+      "text_color": "#000000",
+      "background_color": "#FFFFFF"
+    },
+    "dark": {
+      "text_color": "#000000",
+      "background_color": "#FFFFFF"
+    }
+  },
+  "multinet_model": {
+    "language": "cn",
+    "duration": 3000,
+    "threshold": 0.2,
+    "commands": [
+      {
+        "command": "ha lou bao zi",
+        "text": "哈喽包子",
+        "action": "wake"
+      },
+      {
+        "command": "ni hao bao zi",
+        "text": "你好包子",
+        "action": "wake"
+      },
+      {
+        "command": "bao zi",
+        "text": "包子",
+        "action": "wake"
+      },
+      {
+        "command": "bao zi bao zi",
+        "text": "包子包子",
+        "action": "wake"
+      },
+      {
+        "command": "zai ma bao zi",
+        "text": "在吗包子",
+        "action": "wake"
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "size": 8772904,
+  "sha256": "c43f1e7b880bc7cb10ef4464f195a30e953fb05ed6ed9214d7bf7b17e6be05f2",
+  "images": [
+    {
+      "offset": "0x0",
+      "size": 17008,
+      "checksum": "pass",
+      "sha256": "pass"
+    },
+    {
+      "offset": "0x20000",
+      "size": 2699504,
+      "checksum": "pass",
+      "sha256": "pass"
+    }
+  ],
+  "original_partition_layout": "identical",
+  "original_assets": "byte-for-byte identical",
+  "partition_md5": "pass"
+}

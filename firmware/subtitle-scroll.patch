@@ -1,0 +1,104 @@
+--- a/main/display/lcd_display.cc
++++ b/main/display/lcd_display.cc
+@@ -1,4 +1,5 @@
+ #include "lcd_display.h"
++#include "application.h"
+ #include "assets/lang_config.h"
+ #include "gif/lvgl_gif.h"
+ #include "lvgl_theme.h"
+@@ -14,6 +15,7 @@
+ #include <src/misc/cache/lv_cache.h>
+ #include <algorithm>
+ #include <cstring>
++#include <string>
+ #include <vector>
+ 
+ #include "board.h"
+@@ -24,6 +26,33 @@
+ LV_FONT_DECLARE(BUILTIN_ICON_FONT);
+ LV_FONT_DECLARE(font_material_symbols_30_4);
+ LV_FONT_DECLARE(font_noto_emoji_30_4);
++
++void LcdDisplay::UpdateStatusBarVisibility() {
++    DisplayLockGuard lock(this);
++    const bool idle = Application::GetInstance().GetDeviceState() == kDeviceStateIdle;
++    // Hide both parent layers so clock updates and notification timers cannot
++    // bring back individual labels while the device is idle.
++    for (auto bar : {top_bar_, status_bar_}) {
++        if (bar == nullptr) {
++            continue;
++        }
++        if (idle) {
++            lv_obj_add_flag(bar, LV_OBJ_FLAG_HIDDEN);
++        } else {
++            lv_obj_remove_flag(bar, LV_OBJ_FLAG_HIDDEN);
++        }
++    }
++}
++
++void LcdDisplay::SetStatus(const char* status) {
++    LvglDisplay::SetStatus(status);
++    UpdateStatusBarVisibility();
++}
++
++void LcdDisplay::UpdateStatusBar(bool update_all) {
++    UpdateStatusBarVisibility();
++    LvglDisplay::UpdateStatusBar(update_all);
++}
+ 
+ void LcdDisplay::InitializeLcdThemes() {
+     auto text_font = std::make_shared<LvglBuiltInFont>(&BUILTIN_TEXT_FONT);
+@@ -1017,7 +1046,7 @@
+     chat_message_label_ = lv_label_create(bottom_bar_);
+     lv_label_set_text(chat_message_label_, "");
+     lv_obj_set_width(chat_message_label_, LV_HOR_RES - lvgl_theme->spacing(8));
+-    lv_label_set_long_mode(chat_message_label_, LV_LABEL_LONG_SCROLL_CIRCULAR);
++    lv_label_set_long_mode(chat_message_label_, LV_LABEL_LONG_SCROLL);
+     lv_obj_set_style_text_align(chat_message_label_, LV_TEXT_ALIGN_CENTER, 0);
+     lv_obj_set_style_text_color(chat_message_label_, lvgl_theme->text_color(), 0);
+     lv_obj_align(chat_message_label_, LV_ALIGN_CENTER, 0, 0);
+@@ -1026,6 +1055,8 @@
+     static lv_anim_t a;
+     lv_anim_init(&a);
+     lv_anim_set_delay(&a, 1000);
++    lv_anim_set_reverse_delay(&a, 1000);
++    lv_anim_set_repeat_delay(&a, 1000);
+     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+     lv_obj_set_style_anim(chat_message_label_, &a, LV_PART_MAIN);
+     lv_obj_set_style_anim_duration(chat_message_label_, lv_anim_speed_clamped(60, 300, 60000),
+@@ -1099,7 +1130,15 @@
+         return;
+     }
+     lv_anim_delete(chat_message_label_, nullptr);
+-    lv_label_set_text(chat_message_label_, content);
++#if CONFIG_USE_MULTILINE_CHAT_MESSAGE
++    lv_label_set_text(chat_message_label_, content != nullptr ? content : "");
++#else
++    // Explicit line breaks would make LVGL scroll vertically even in scroll mode.
++    std::string single_line = content != nullptr ? content : "";
++    std::replace(single_line.begin(), single_line.end(), '\r', ' ');
++    std::replace(single_line.begin(), single_line.end(), '\n', ' ');
++    lv_label_set_text(chat_message_label_, single_line.c_str());
++#endif
+     // Show bottom_bar_ only when there is content (and subtitle is not globally hidden)
+     if (bottom_bar_ != nullptr) {
+         if (content == nullptr || content[0] == '\0') {
+--- a/main/display/lcd_display.h
++++ b/main/display/lcd_display.h
+@@ -34,6 +34,7 @@
+     bool hide_subtitle_ = false;  // Control whether to hide chat messages/subtitles
+ 
+     void InitializeLcdThemes();
++    void UpdateStatusBarVisibility();
+     virtual bool Lock(int timeout_ms = 0) override;
+     virtual void Unlock() override;
+ 
+@@ -45,6 +46,8 @@
+ public:
+     ~LcdDisplay();
+     virtual void SetEmotion(const char* emotion) override;
++    void SetStatus(const char* status) override;
++    void UpdateStatusBar(bool update_all = false) override;
+     virtual void SetChatMessage(const char* role, const char* content) override;
+     virtual void ClearChatMessages() override;
+     virtual void SetPreviewImage(std::unique_ptr<LvglImage> image) override;
